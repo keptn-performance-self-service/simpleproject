@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  name: simplenode-primary
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: simplenode-primary
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: simplenode-primary
+    spec:
+      containers:
+      - env:
+        - name: DT_CUSTOM_PROP
+          value: keptn_project=simpleproject keptn_service=simplenode keptn_stage=performance
+            keptn_deployment=primary
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: DEPLOYMENT_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['deployment']
+        - name: CONTAINER_IMAGE
+          value: docker.io/grabnerandi/simplenodeservice:1.0.0
+        - name: KEPTN_PROJECT
+          value: simpleproject
+        - name: KEPTN_STAGE
+          value: performance
+        - name: KEPTN_SERVICE
+          value: simplenode
+        - name: KEPTN_DEPLOYMENT
+          value: canary
+        image: docker.io/grabnerandi/simplenodeservice:1.0.0
+        imagePullPolicy: Always
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          timeoutSeconds: 15
+        name: simplenode
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          timeoutSeconds: 15
+        resources:
+          limits:
+            cpu: 200m
+            memory: 500Mi
+          requests:
+            cpu: 200m
+            memory: 500Mi
+status: {}
