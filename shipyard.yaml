@@ -1,0 +1,4 @@
+stages:
+- name: "performance"
+  deployment_strategy: "blue_green_service"
+  test_strategy: "performance"
