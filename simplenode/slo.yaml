@@ -24,9 +24,6 @@ objectives:
       - criteria:
           - "<=2%"
   - sli: response_time_p90
-  - sli: rt_url_apiinvoke
-  - sli: svccalls_url_apiinvoke
-  - sli: dbcalls_url_apiinvoke
   #  pass:
   #    - criteria:
   #        - "<=2%"
